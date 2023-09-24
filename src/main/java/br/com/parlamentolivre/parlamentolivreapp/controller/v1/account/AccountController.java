@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api-parlamento-livre/v1/")
+@RequestMapping("api-parlamento-livre/v1/account/")
 public class AccountController {
 
     AccountService accountService;
