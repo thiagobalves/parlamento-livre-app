@@ -16,7 +16,7 @@ public class AccountController {
     public AccountController(AccountService accountService){
         this.accountService = accountService;
     };
-    
+
     @GetMapping("getHelloWorld")
     public String getHelloWorld(){
         return accountService.getHelloWorld();
