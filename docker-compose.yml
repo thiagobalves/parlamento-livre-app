@@ -1,0 +1,41 @@
+version: '3'
+
+volumes:
+  mysql_data:
+    driver: local
+
+services:
+  keycloack:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloack-parlamento-livre
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: ${DB_DATABASE_KEYCLOACK}
+      DB_USER: ${DB_USER_KEYCLOACK}
+      DB_PASSWORD: ${DB_PASSWORD_KEYCLOACK}
+      KEYCLOACK_USER: ${KEYCLOACK_USER}
+      KEYCLOACK_PASSWORD: ${KEYCLOACK_PASSWORD}
+    ports:
+      - ${PORTS_KEYCLOACK}
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.1.0
+    container_name: parlamento-livre-db
+    ports:
+      - ${DB_DOCKER_PORTS}
+    volumes:
+      - mysql_data:/home/thiagobalves/repo/parlamento-livre-data
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD}
+
+
+
+
+
+
+
