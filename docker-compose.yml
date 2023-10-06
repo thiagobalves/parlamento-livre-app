@@ -6,36 +6,43 @@ volumes:
 
 services:
   keycloack:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:20.0.2
     container_name: keycloack-parlamento-livre
     environment:
-      DB_VENDOR: MYSQL
-      DB_ADDR: mysql
-      DB_DATABASE: ${DB_DATABASE_KEYCLOACK}
-      DB_USER: ${DB_USER_KEYCLOACK}
-      DB_PASSWORD: ${DB_PASSWORD_KEYCLOACK}
-      KEYCLOACK_USER: ${KEYCLOACK_USER}
-      KEYCLOACK_PASSWORD: ${KEYCLOACK_PASSWORD}
+      KC_HOSTNAME: ${KEY_CLOACK_HOSTNAME}
+      KC_HOSTNAME_PORT: ${KEY_CLOACK_HOSTNAME_PORT}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_DB: mysql
+      KC_DB_URL: ${KEY_CLOACK_DB_URL}
+      KC_DB_USERNAME: ${KEY_CLOACK_DB_USER}
+      KC_DB_PASSWORD: ${KEY_CLOACK_DB_PASSWORD}
+      DB_DATABASE: ${KEY_CLOACK_DB_NAME}
+      KEYCLOAK_ADMIN: ${KEY_CLOACK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEY_CLOACK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http:7080/health/ready"]
+      interval: 15s
+      timeout: 2s
+      retries: 15
+    command: [ "start-dev", "--http-port 7080", "--import-realm"]
+    volumes:
+      - ../keycloack/realm-export.json:/home/thiagobalves/repo/keycloack/data/import/realm-export.json
     ports:
-      - ${PORTS_KEYCLOACK}
+      - 7080:7080
+      - 7443:7443
     depends_on:
       - mysql
   mysql:
     image: mysql:8.1.0
     container_name: parlamento-livre-db
     ports:
-      - ${DB_DOCKER_PORTS}
+      - 3306:3306
     volumes:
       - mysql_data:/home/thiagobalves/repo/parlamento-livre-data
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_USER_PASSWORD}
-
-
-
-
-
-
-
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
