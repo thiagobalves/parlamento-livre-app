@@ -1,19 +1,31 @@
 package br.com.parlamentolivre.parlamentolivreapp.configuration;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import org.springframework.context.annotation.Bean;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Parlamento Livre API",
+                version = "1.0",
+                contact = @Contact(
+                        name = "Thiago Alves",
+                        email = "thiago.balves@hotmail.com",
+                        url = "https://github.com/thiagobalves"
+                ),
+                description = "Projeto backend do APP Parlamento Livre"
+        )
+)
+@SecurityScheme(
+        name = "Bearer Authentication",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class OpenApiConfig {
-    @Bean
-    public OpenAPI api(){
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Parlamento Livre API")
-                        .description("Projeto backend do APP Parlamento Livre")
-                        .version("1.0")
-                );
-    }
 }
